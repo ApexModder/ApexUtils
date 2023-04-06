@@ -3,7 +3,7 @@ name: Java CI Testing (JUnit)
 on: [ push ]
 
 concurrency:
-  group: ${{ github.ref }}
+  group: test-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
