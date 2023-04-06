@@ -1,6 +1,8 @@
 package xyz.apex.utils.config;
 
 import com.google.gson.JsonElement;
+import com.google.gson.JsonNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -14,8 +16,8 @@ record ConfigSerializerImpl<T>(BiFunction<T, JsonElement, T> deserializer, Funct
     }
 
     @Override
-    public JsonElement serialize(T value)
+    public JsonElement serialize(@Nullable T value)
     {
-        return serializer.apply(value);
+        return value == null ? JsonNull.INSTANCE : serializer.apply(value);
     }
 }

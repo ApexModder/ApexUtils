@@ -7,7 +7,7 @@ import java.util.function.*;
  *
  * @param <T> Data type of ConfigValue
  */
-public sealed interface ConfigValue<T> extends Supplier<T> permits ConfigValue.Boolean, ConfigValue.Numeric, ConfigValueImpl
+public sealed interface ConfigValue<T> extends Supplier<T> permits ConfigValue.Boolean, ConfigValue.List, ConfigValue.Numeric, ConfigValueImpl, ConfigValueImpl.ListImpl
 {
     /**
      * @return Config this ConfigValue is bound to.
@@ -193,5 +193,21 @@ public sealed interface ConfigValue<T> extends Supplier<T> permits ConfigValue.B
         {
             return maxValue();
         }
+    }
+
+    sealed interface List<T> extends ConfigValue<java.util.List<T>>, java.util.List<T> permits ConfigValueImpl.ListImpl
+    {
+        /**
+         * @return List of all possible values this ConfigValue may accept.
+         */
+        java.util.List<T> possibleValues();
+
+        /**
+         * Returns true if the specified value is contained within {@link #possibleValues()}
+         *
+         * @param value Value to validate if valid
+         * @return True if the specified value is contained within {@link #possibleValues()}
+         */
+        boolean isValid(T value);
     }
 }

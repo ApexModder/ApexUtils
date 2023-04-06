@@ -5,6 +5,9 @@ import org.junit.jupiter.api.Test;
 import xyz.apex.utils.config.ConfigBuilder;
 
 import java.nio.file.Files;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
 
 public final class ConfigTests
 {
@@ -39,5 +42,21 @@ public final class ConfigTests
         Assertions.assertEquals(cfgIAmABool.get(), true);
         Assertions.assertEquals(cfgIAmADouble.get(), 1D);
         Assertions.assertEquals(cfgIAmAFloat.get(), 1F);
+    }
+
+    @Test
+    void listConfigs()
+    {
+        var builder = ConfigBuilder.builder("list_test");
+
+        var cfgSomeList = builder.defineStringList("some_list", List.of("entry_a", "entry_b"), Collections.emptyList());
+        var cfgInvalid = builder.defineStringList("some_invalid_list", List.of("some_value"), List.of("some_default_value"), List.of(String.valueOf(new Random().nextLong())));
+
+        var config = builder.build();
+        config.load();
+
+        Assertions.assertEquals(cfgSomeList.get(), List.of("entry_a", "entry_b"));
+        Assertions.assertNotEquals(cfgSomeList.get(), List.of("entry_b", "entry_a"));
+        Assertions.assertFalse(cfgInvalid.add("some_value"));
     }
 }

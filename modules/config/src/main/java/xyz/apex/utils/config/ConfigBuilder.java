@@ -2,6 +2,8 @@ package xyz.apex.utils.config;
 
 import xyz.apex.utils.core.ApexUtils;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.function.Function;
 
 /**
@@ -299,6 +301,284 @@ public sealed interface ConfigBuilder permits ConfigBuilderImpl
     {
         return defineBoolean(key, defaultValue, defaultValue);
     }
+    // endregion
+
+    // region: List
+    /**
+     * Builds and registers a new List ConfigValue.
+     *
+     * @param key Key to be bound to this ConfigValue.
+     * @param initialValues Initial values the newly built List will contain.
+     * @param defaultValues List of default values for this List
+     * @param possibleValues List of possible values this List may contain (An empty list here indicates any value is valid)
+     * @param serializer Serializer to be used during serialization of this ConfigValue
+     * @return Newly built &#38; registered ConfigValue.
+     * @param <T> Data type stored within the List
+     */
+    default <T> ConfigValue.List<T> defineList(String key, List<T> initialValues, List<T> defaultValues, List<T> possibleValues, ConfigSerializer<List<T>> serializer)
+    {
+        return define(key, config -> new ConfigValueImpl.ListImpl<>(config, key, initialValues, defaultValues, possibleValues, serializer));
+    }
+
+    // region: String
+    /**
+     * Builds and registers a new String List ConfigValue.
+     *
+     * @param key Key to be bound to this ConfigValue.
+     * @param initialValues Initial values the newly built List will contain.
+     * @param defaultValues List of default values for this List
+     * @param possibleValues List of possible values this List may contain (An empty list here indicates any value is valid)
+     * @return Newly built &#38; registered ConfigValue.
+     */
+    default ConfigValue.List<String> defineStringList(String key, List<String> initialValues, List<String> defaultValues, List<String> possibleValues)
+    {
+        return defineList(key, initialValues, defaultValues, possibleValues, ConfigSerializers.STRING_LIST);
+    }
+
+    /**
+     * Builds and registers a new String List ConfigValue.
+     *
+     * @param key Key to be bound to this ConfigValue.
+     * @param defaultValues List of default values for this List
+     * @param possibleValues List of possible values this List may contain (An empty list here indicates any value is valid)
+     * @return Newly built &#38; registered ConfigValue.
+     */
+    default ConfigValue.List<String> defineStringList(String key, List<String> defaultValues, List<String> possibleValues)
+    {
+        return defineStringList(key, defaultValues, defaultValues, possibleValues);
+    }
+
+    /**
+     * Builds and registers a new String List ConfigValue.
+     * <p>
+     * This list will allow any String value to be input into it [empty <i>possibleValues</i> list].
+     *
+     * @param key Key to be bound to this ConfigValue.
+     * @param defaultValues List of default values for this List
+     * @return Newly built &#38; registered ConfigValue.
+     */
+    default ConfigValue.List<String> defineStringList(String key, List<String> defaultValues)
+    {
+        return defineStringList(key, defaultValues, defaultValues, Collections.emptyList());
+    }
+    // endregion
+
+    // region: Numeric
+    // region: Integer
+    /**
+     * Builds and registers a new Integer List ConfigValue.
+     *
+     * @param key Key to be bound to this ConfigValue.
+     * @param initialValues Initial values the newly built List will contain.
+     * @param defaultValues List of default values for this List
+     * @param possibleValues List of possible values this List may contain (An empty list here indicates any value is valid)
+     * @return Newly built &#38; registered ConfigValue.
+     */
+    default ConfigValue.List<Integer> defineIntegerList(String key, List<Integer> initialValues, List<Integer> defaultValues, List<Integer> possibleValues)
+    {
+        return defineList(key, initialValues, defaultValues, possibleValues, ConfigSerializers.INTEGER_LIST);
+    }
+
+    /**
+     * Builds and registers a new Integer List ConfigValue.
+     *
+     * @param key Key to be bound to this ConfigValue.
+     * @param defaultValues List of default values for this List
+     * @param possibleValues List of possible values this List may contain (An empty list here indicates any value is valid)
+     * @return Newly built &#38; registered ConfigValue.
+     */
+    default ConfigValue.List<Integer> defineIntegerList(String key, List<Integer> defaultValues, List<Integer> possibleValues)
+    {
+        return defineIntegerList(key, defaultValues, defaultValues, possibleValues);
+    }
+
+    /**
+     * Builds and registers a new Integer List ConfigValue.
+     * <p>
+     * This list will allow any Integer value to be input into it [empty <i>possibleValues</i> list].
+     *
+     * @param key Key to be bound to this ConfigValue.
+     * @param defaultValues List of default values for this List
+     * @return Newly built &#38; registered ConfigValue.
+     */
+    default ConfigValue.List<Integer> defineIntegerList(String key, List<Integer> defaultValues)
+    {
+        return defineIntegerList(key, defaultValues, defaultValues, Collections.emptyList());
+    }
+    // endregion
+
+    // region: Double
+    /**
+     * Builds and registers a new Double List ConfigValue.
+     *
+     * @param key Key to be bound to this ConfigValue.
+     * @param initialValues Initial values the newly built List will contain.
+     * @param defaultValues List of default values for this List
+     * @param possibleValues List of possible values this List may contain (An empty list here indicates any value is valid)
+     * @return Newly built &#38; registered ConfigValue.
+     */
+    default ConfigValue.List<Double> defineDoubleList(String key, List<Double> initialValues, List<Double> defaultValues, List<Double> possibleValues)
+    {
+        return defineList(key, initialValues, defaultValues, possibleValues, ConfigSerializers.DOUBLE_LIST);
+    }
+
+    /**
+     * Builds and registers a new Double List ConfigValue.
+     *
+     * @param key Key to be bound to this ConfigValue.
+     * @param defaultValues List of default values for this List
+     * @param possibleValues List of possible values this List may contain (An empty list here indicates any value is valid)
+     * @return Newly built &#38; registered ConfigValue.
+     */
+    default ConfigValue.List<Double> defineDoubleList(String key, List<Double> defaultValues, List<Double> possibleValues)
+    {
+        return defineDoubleList(key, defaultValues, defaultValues, possibleValues);
+    }
+
+    /**
+     * Builds and registers a new Double List ConfigValue.
+     * <p>
+     * This list will allow any Double value to be input into it [empty <i>possibleValues</i> list].
+     *
+     * @param key Key to be bound to this ConfigValue.
+     * @param defaultValues List of default values for this List
+     * @return Newly built &#38; registered ConfigValue.
+     */
+    default ConfigValue.List<Double> defineDoubleList(String key, List<Double> defaultValues)
+    {
+        return defineDoubleList(key, defaultValues, defaultValues, Collections.emptyList());
+    }
+    // endregion
+
+    // region: Float
+    /**
+     * Builds and registers a new Float List ConfigValue.
+     *
+     * @param key Key to be bound to this ConfigValue.
+     * @param initialValues Initial values the newly built List will contain.
+     * @param defaultValues List of default values for this List
+     * @param possibleValues List of possible values this List may contain (An empty list here indicates any value is valid)
+     * @return Newly built &#38; registered ConfigValue.
+     */
+    default ConfigValue.List<Float> defineFloatList(String key, List<Float> initialValues, List<Float> defaultValues, List<Float> possibleValues)
+    {
+        return defineList(key, initialValues, defaultValues, possibleValues, ConfigSerializers.FLOAT_LIST);
+    }
+
+    /**
+     * Builds and registers a new Float List ConfigValue.
+     *
+     * @param key Key to be bound to this ConfigValue.
+     * @param defaultValues List of default values for this List
+     * @param possibleValues List of possible values this List may contain (An empty list here indicates any value is valid)
+     * @return Newly built &#38; registered ConfigValue.
+     */
+    default ConfigValue.List<Float> defineFloatList(String key, List<Float> defaultValues, List<Float> possibleValues)
+    {
+        return defineFloatList(key, defaultValues, defaultValues, possibleValues);
+    }
+
+    /**
+     * Builds and registers a new Float List ConfigValue.
+     * <p>
+     * This list will allow any Float value to be input into it [empty <i>possibleValues</i> list].
+     *
+     * @param key Key to be bound to this ConfigValue.
+     * @param defaultValues List of default values for this List
+     * @return Newly built &#38; registered ConfigValue.
+     */
+    default ConfigValue.List<Float> defineFloatList(String key, List<Float> defaultValues)
+    {
+        return defineFloatList(key, defaultValues, defaultValues, Collections.emptyList());
+    }
+    // endregion
+
+    // region: Long
+    /**
+     * Builds and registers a new Long List ConfigValue.
+     *
+     * @param key Key to be bound to this ConfigValue.
+     * @param initialValues Initial values the newly built List will contain.
+     * @param defaultValues List of default values for this List
+     * @param possibleValues List of possible values this List may contain (An empty list here indicates any value is valid)
+     * @return Newly built &#38; registered ConfigValue.
+     */
+    default ConfigValue.List<Long> defineLongList(String key, List<Long> initialValues, List<Long> defaultValues, List<Long> possibleValues)
+    {
+        return defineList(key, initialValues, defaultValues, possibleValues, ConfigSerializers.LONG_LIST);
+    }
+
+    /**
+     * Builds and registers a new Long List ConfigValue.
+     *
+     * @param key Key to be bound to this ConfigValue.
+     * @param defaultValues List of default values for this List
+     * @param possibleValues List of possible values this List may contain (An empty list here indicates any value is valid)
+     * @return Newly built &#38; registered ConfigValue.
+     */
+    default ConfigValue.List<Long> defineLongList(String key, List<Long> defaultValues, List<Long> possibleValues)
+    {
+        return defineLongList(key, defaultValues, defaultValues, possibleValues);
+    }
+
+    /**
+     * Builds and registers a new Long List ConfigValue.
+     * <p>
+     * This list will allow any Long value to be input into it [empty <i>possibleValues</i> list].
+     *
+     * @param key Key to be bound to this ConfigValue.
+     * @param defaultValues List of default values for this List
+     * @return Newly built &#38; registered ConfigValue.
+     */
+    default ConfigValue.List<Long> defineLongList(String key, List<Long> defaultValues)
+    {
+        return defineLongList(key, defaultValues, defaultValues, Collections.emptyList());
+    }
+    // endregion
+    // endregion
+
+    // region: Boolean
+    /**
+     * Builds and registers a new Boolean List ConfigValue.
+     *
+     * @param key Key to be bound to this ConfigValue.
+     * @param initialValues Initial values the newly built List will contain.
+     * @param defaultValues List of default values for this List
+     * @param possibleValues List of possible values this List may contain (An empty list here indicates any value is valid)
+     * @return Newly built &#38; registered ConfigValue.
+     */
+    default ConfigValue.List<Boolean> defineBooleanList(String key, List<Boolean> initialValues, List<Boolean> defaultValues, List<Boolean> possibleValues)
+    {
+        return defineList(key, initialValues, defaultValues, possibleValues, ConfigSerializers.BOOLEAN_LIST);
+    }
+
+    /**
+     * Builds and registers a new Boolean List ConfigValue.
+     *
+     * @param key Key to be bound to this ConfigValue.
+     * @param defaultValues List of default values for this List
+     * @param possibleValues List of possible values this List may contain (An empty list here indicates any value is valid)
+     * @return Newly built &#38; registered ConfigValue.
+     */
+    default ConfigValue.List<Boolean> defineBooleanList(String key, List<Boolean> defaultValues, List<Boolean> possibleValues)
+    {
+        return defineBooleanList(key, defaultValues, defaultValues, possibleValues);
+    }
+
+    /**
+     * Builds and registers a new Boolean List ConfigValue.
+     * <p>
+     * This list will allow any Boolean value to be input into it [empty <i>possibleValues</i> list].
+     *
+     * @param key Key to be bound to this ConfigValue.
+     * @param defaultValues List of default values for this List
+     * @return Newly built &#38; registered ConfigValue.
+     */
+    default ConfigValue.List<Boolean> defineBooleanList(String key, List<Boolean> defaultValues)
+    {
+        return defineBooleanList(key, defaultValues, defaultValues, Collections.emptyList());
+    }
+    // endregion
     // endregion
 
     /**
