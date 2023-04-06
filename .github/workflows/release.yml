@@ -1,0 +1,43 @@
+name: Java Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: convictional/trigger-workflow-and-wait@v1.6.1
+        with:
+          owner: ApexModder
+          repo: ApexUtils
+
+  release:
+    needs: [ test ] # wait for testing to finish
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-java@v3
+        with:
+          distribution: adopt-openj9
+          java-version: 17
+          cache: 'gradle'
+      - run: chmod +x ./gradlew
+      - run: ./gradlew copyJars publish
+      - uses: softprops/action-gh-release@v1
+        with:
+          generate_release_notes: true
+          files: |
+            ${{ github.workspace }}/jars/*.jar
+            ${{ github.workspace }}/LICENSE
