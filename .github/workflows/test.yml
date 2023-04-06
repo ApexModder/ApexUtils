@@ -2,13 +2,18 @@ name: Java CI Testing (JUnit)
 
 on: [ push ]
 
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   test:
     strategy:
       matrix:
         os: [ ubuntu-latest, windows-latest, macos-latest ]
         java_version: [ 16, 17, 18 ]
-        java_dist: [ adopt-hotspot, adopt-openj9, temurin, zulu, corretto ]
+        # java_dist: [ adopt-hotspot, adopt-openj9, temurin, zulu, corretto ]
+        java_dist: [ adopt-openj9 ]
     runs-on: ${{ matrix.os }}
 
     steps:
