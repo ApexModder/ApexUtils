@@ -31,6 +31,8 @@ jobs:
           cache: 'gradle'
       - if: ${{ matrix.os != 'windows-latest' }}
         run: chmod +x ./gradlew
+        env:
+          MAVEN_PASSWORD: ${{ secrets.MAVEN_PASSWORD }}
       - run: ./gradlew test --no-daemon
 
   release:
