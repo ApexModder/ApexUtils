@@ -21,6 +21,8 @@ jobs:
         with:
           owner: ApexModder
           repo: ApexUtils
+          github_token: ${{ secrets.APEX_ACTIONS_PAT }}
+          workflow_file_name: test.yml
 
   release:
     needs: [ test ] # wait for testing to finish
