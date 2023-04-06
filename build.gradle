@@ -54,7 +54,9 @@ project(':') {
 
     dependencies {
         subprojects.each {
-            shadow it
+            shadow(it) {
+                transitive false
+            }
         }
     }
 
