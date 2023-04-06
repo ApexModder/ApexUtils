@@ -2,6 +2,7 @@ plugins {
     id 'org.jetbrains.gradle.plugin.idea-ext' version '1.1' apply false
     id 'com.palantir.git-version' version '1.0.0' apply false
     id 'com.github.johnrengelman.shadow' version '7.1.2' apply false
+    id 'net.minecraftforge.gradleutils' version '2.+' apply false
 }
 
 allprojects {
@@ -13,6 +14,12 @@ allprojects {
 project(':') {
     apply plugin: 'com.palantir.git-version'
     apply plugin: 'com.github.johnrengelman.shadow'
+    apply plugin: 'net.minecraftforge.gradleutils'
+
+    afterEvaluate {
+        tasks.setupTeamCityProject.enabled = false
+        tasks.findByName('configureTeamCity')??.enabled = false
+    }
 
     ext {
         REPO = versionDetails()
@@ -60,13 +67,29 @@ project(':') {
         }
     }
 
+    changelog {
+        fromTag "${REPO.lastTag}"
+    }
+
+    createChangelog {
+        doLast {
+            def lines = file(outputFile).readLines()
+            lines.remove(0)
+            file(outputFile).write(lines.join('\n'))
+        }
+    }
+
     shadowJar {
         classifier ''
         configurations = [ project.configurations.shadow ]
+        dependsOn rootProject.tasks.createChangelog
+        from tasks.createChangelog.outputFile
     }
 
     task sourcesJar(type: Jar) {
         from subprojects.collect { it.sourceSets.main.allSource }
+        dependsOn rootProject.tasks.createChangelog
+        from tasks.createChangelog.outputFile
         classifier 'sources'
     }
 
@@ -76,6 +99,8 @@ project(':') {
 
     task javadocJar(type: Jar) {
         from tasks.javadoc
+        dependsOn rootProject.tasks.createChangelog
+        from tasks.createChangelog.outputFile
         classifier 'javadoc'
     }
 
@@ -208,6 +233,16 @@ subprojects {
     java {
         withSourcesJar()
         withJavadocJar()
+    }
+
+    jar {
+        dependsOn rootProject.tasks.createChangelog
+        from rootProject.tasks.createChangelog.outputFile
+    }
+
+    sourcesJar {
+        dependsOn rootProject.tasks.createChangelog
+        from rootProject.tasks.createChangelog.outputFile
     }
 
     artifacts {
