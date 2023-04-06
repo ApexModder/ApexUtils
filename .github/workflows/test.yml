@@ -1,6 +1,10 @@
 name: Java CI Testing (JUnit)
 
-on: [ push ]
+on:
+  push:
+    tags-ignore:
+      - '***'
+  pull_request:
 
 concurrency:
   group: test-${{ github.ref }}
