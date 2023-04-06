@@ -206,3 +206,12 @@ subprojects {
         }
     }
 }
+
+project(':') {
+    task copyJars(type: Copy) {
+        def jars = allprojects.collect { it.tasks.withType(Jar) }
+        dependsOn jars
+        from jars
+        into file('jars')
+    }
+}
