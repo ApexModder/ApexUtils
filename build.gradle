@@ -65,14 +65,32 @@ project(':') {
         configurations = [ project.configurations.shadow ]
     }
 
+    task sourcesJar(type: Jar) {
+        from subprojects.collect { it.sourceSets.main.allSource }
+        classifier 'sources'
+    }
+
+    javadoc {
+        source subprojects.collect { it.sourceSets.main.allJava }
+    }
+
+    task javadocJar(type: Jar) {
+        from tasks.javadoc
+        classifier 'javadoc'
+    }
+
     artifacts {
         archives shadowJar
+        archives sourcesJar
+        archives javadocJar
     }
 
     publishing {
         publications {
             mavenJava(MavenPublication) {
                 artifact shadowJar
+                artifact sourcesJar
+                artifact javadocJar
             }
         }
     }
