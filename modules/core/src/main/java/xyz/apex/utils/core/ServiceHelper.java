@@ -1,5 +1,7 @@
 package xyz.apex.utils.core;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.util.List;
 import java.util.ServiceLoader;
 import java.util.function.Supplier;
@@ -18,10 +20,10 @@ public interface ServiceHelper
      * @return Loaded service instance.
      * @param <T> Type of service to be loaded
      */
-    static <T> T singleton(Class<T> serviceType, Supplier<T> defaultImpl)
+    static <T> T singleton(Class<T> serviceType, @Nullable Supplier<T> defaultImpl)
     {
         var providers = ServiceLoader.load(serviceType).stream().toList();
-        if(providers.isEmpty()) return defaultImpl.get();
+        if(providers.isEmpty() && defaultImpl != null) return defaultImpl.get();
         else if(providers.size() != 1)
         {
             var names = providers.stream().map(ServiceLoader.Provider::type).map(Class::getName).collect(Collectors.joining(",", "[", "]"));
@@ -33,6 +35,18 @@ public interface ServiceHelper
             consume(serviceType, provider);
             return provider.get();
         }
+    }
+
+    /**
+     * Loads a singleton service, throws exception if multiple implementations exist.
+     *
+     * @param serviceType Type of service to be loaded.
+     * @return Loaded service instance.
+     * @param <T> Type of service to be loaded
+     */
+    static <T> T singleton(Class<T> serviceType)
+    {
+        return singleton(serviceType, null);
     }
 
     /**
