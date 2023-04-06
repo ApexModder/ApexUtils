@@ -195,6 +195,8 @@ allprojects {
 }
 
 subprojects {
+    archivesBaseName = "apexutils-${project.name}"
+
     dependencies {
         testImplementation "org.junit.jupiter:junit-jupiter:${rootProject.JUNIT_VERSION}"
     }
