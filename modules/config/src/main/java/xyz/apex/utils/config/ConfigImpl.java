@@ -4,6 +4,7 @@ import com.google.common.collect.Maps;
 import com.google.gson.*;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.Nullable;
+import xyz.apex.utils.config.events.ConfigEvent;
 import xyz.apex.utils.core.ApexUtils;
 
 import java.io.IOException;
@@ -113,8 +114,8 @@ final class ConfigImpl implements Config
         {
             ApexUtils.LOGGER.info("Config file ({}) does not exist, saving defaults to disk!", filePath);
             save(true, true);
-            // notify services
-            ConfigService.consume(service -> service.onConfigLoaded(this));
+            // post config load event
+            ConfigEvent.LOAD.post(this);
             return;
         }
 
@@ -134,8 +135,8 @@ final class ConfigImpl implements Config
         catch(IOException e)
         {
             ApexUtils.LOGGER.error("Error occurred while reading config file: {}", filePath, e);
-            // notify services
-            ConfigService.consume(service -> service.onConfigLoaded(this));
+            // post config load event
+            ConfigEvent.LOAD.post(this);
             return;
         }
 
@@ -172,8 +173,8 @@ final class ConfigImpl implements Config
             write(path, newJson);
         }
 
-        // notify services
-        ConfigService.consume(service -> service.onConfigLoaded(this));
+        // post config load event
+        ConfigEvent.LOAD.post(this);
     }
 
     @Override
@@ -203,8 +204,8 @@ final class ConfigImpl implements Config
         // write to disk
         write(path, root);
 
-        // notify services
-        ConfigService.consume(service -> service.onConfigSaved(this));
+        // post config save event
+        ConfigEvent.SAVE.post(this);
     }
 
     @Override
