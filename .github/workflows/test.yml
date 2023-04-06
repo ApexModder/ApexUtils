@@ -2,8 +2,8 @@ name: Java CI Testing (JUnit)
 
 on:
   push:
-    tags-ignore:
-      - '***'
+    tags:
+      - '!**'
   pull_request:
 
 concurrency:
