@@ -183,7 +183,8 @@ allprojects {
                     'Implementation-Title' : "${project.archivesBaseName}",
                     'Implementation-Version' : "${rootProject.VERSION}",
                     'Implementation-Vendor' : 'ApexStudios',
-                    'Implementation-Timestamp': new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+                    'Implementation-Timestamp': new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+                    'FMLModType': 'GAMELIBRARY'
             ])
         }
     }
