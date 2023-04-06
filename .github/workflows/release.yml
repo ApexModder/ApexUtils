@@ -1,6 +1,9 @@
 name: Java Test & Release
 
-on: [ push ]
+on:
+  push:
+    tags:
+      - 'v*.*'
 
 concurrency:
   group: ${{ github.ref }}
