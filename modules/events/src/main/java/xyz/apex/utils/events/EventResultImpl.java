@@ -2,7 +2,11 @@ package xyz.apex.utils.events;
 
 import org.jetbrains.annotations.Nullable;
 
-import java.util.function.Consumer;
+import java.util.Optional;
+import java.util.OptionalDouble;
+import java.util.OptionalInt;
+import java.util.OptionalLong;
+import java.util.function.*;
 
 final class EventResultImpl<E extends Event> implements EventResult<E>
 {
@@ -65,6 +69,37 @@ final class EventResultImpl<E extends Event> implements EventResult<E>
     public boolean wasPassed()
     {
         return type == PASS;
+    }
+
+    @Override
+    public <T> Optional<T> map(Function<E, T> mapper)
+    {
+        return event == null ? Optional.empty() : Optional.ofNullable(mapper.apply(event));
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> Optional<T> flatMap(Function<E, ? super Optional<? extends T>> mapper)
+    {
+        return event == null ? Optional.empty() : (Optional<T>) mapper.apply(event);
+    }
+
+    @Override
+    public OptionalInt mapToInt(ToIntFunction<E> mapper)
+    {
+        return event == null ? OptionalInt.empty() : OptionalInt.of(mapper.applyAsInt(event));
+    }
+
+    @Override
+    public OptionalLong mapToLong(ToLongFunction<E> mapper)
+    {
+        return event == null ? OptionalLong.empty() : OptionalLong.of(mapper.applyAsLong(event));
+    }
+
+    @Override
+    public OptionalDouble mapToDouble(ToDoubleFunction<E> mapper)
+    {
+        return event == null ? OptionalDouble.empty() : OptionalDouble.of(mapper.applyAsDouble(event));
     }
 
     @Override

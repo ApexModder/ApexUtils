@@ -1,7 +1,10 @@
 package xyz.apex.utils.events;
 
-import java.util.function.Consumer;
-import java.util.function.IntSupplier;
+import java.util.Optional;
+import java.util.OptionalDouble;
+import java.util.OptionalInt;
+import java.util.OptionalLong;
+import java.util.function.*;
 
 /**
  * A EventResult states whether an event was posted successfully, cancelled or passed.
@@ -77,6 +80,48 @@ public sealed interface EventResult<E extends Event> extends IntSupplier permits
      * @return True if event was passed.
      */
     boolean wasPassed();
+
+    /**
+     * Maps this EventResult to requested value.
+     *
+     * @param mapper Function used to map to requested value.
+     * @return Result after mapping this EventResult.
+     * @param <T> Type to map this EventResult to.
+     */
+    <T> Optional<T> map(Function<E, T> mapper);
+
+    /**
+     * Maps this EventResult to requested value.
+     *
+     * @param mapper Function used to map to requested value.
+     * @return Result after mapping this EventResult.
+     * @param <T> Type to map this EventResult to.
+     */
+    <T> Optional<T> flatMap(Function<E, ? super Optional<? extends T>> mapper);
+
+    /**
+     * Maps this EventResult to requested value.
+     *
+     * @param mapper Function used to map to requested value.
+     * @return Result after mapping this EventResult.
+     */
+    OptionalInt mapToInt(ToIntFunction<E> mapper);
+
+    /**
+     * Maps this EventResult to requested value.
+     *
+     * @param mapper Function used to map to requested value.
+     * @return Result after mapping this EventResult.
+     */
+    OptionalLong mapToLong(ToLongFunction<E> mapper);
+
+    /**
+     * Maps this EventResult to requested value.
+     *
+     * @param mapper Function used to map to requested value.
+     * @return Result after mapping this EventResult.
+     */
+    OptionalDouble mapToDouble(ToDoubleFunction<E> mapper);
 
     /**
      * Creates a new successful EventResult for the given Event.
